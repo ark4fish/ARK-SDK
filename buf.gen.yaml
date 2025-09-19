@@ -1,0 +1,29 @@
+version: v2
+clean: true
+managed:
+  enabled: true
+  disable:
+    - file_option: go_package
+      module: buf.build/googleapis/googleapis
+  override:
+    - file_option: go_package_prefix
+      value: github.com/ark4fish/ARK-SDK/api-spec/protobuf/gen
+inputs:
+  - git_repo: https://github.com/ark4fish/ARK.git
+    branch: v0.7.1rc
+    subdir: api-spec/protobuf
+    exclude_paths:
+      - arkwallet/v1/bitcoin_wallet.proto
+      - ark/v1/admin.proto
+      - ark/v1/wallet.proto
+      - ark/v1/signer_manager.proto
+      - signer/v1/service.proto
+plugins:
+  - remote: buf.build/protocolbuffers/go:v1.36.7
+    out: api-spec/protobuf/gen
+    opt: paths=source_relative
+  - remote: buf.build/grpc/go:v1.5.1
+    out: api-spec/protobuf/gen
+    opt: paths=source_relative,require_unimplemented_servers=false
+  - remote: buf.build/grpc-ecosystem/openapiv2:v2.27.1
+    out: api-spec/openapi/swagger
